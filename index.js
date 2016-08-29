@@ -40,7 +40,7 @@ socket.on('update', function(data){
 		ongoingEvent = 1;
 		console.log("recv update",data);	
 		cmd.get(
-			"git pull",
+			"git pull origin master",
 			function(res){
 				console.log("update done - rebirth()");
 				rebirth();
