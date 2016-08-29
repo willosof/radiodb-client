@@ -1,6 +1,7 @@
 var cmd = require('node-cmd');
 var socket = require('socket.io-client')('http://radio.raider.no');
 var ongoingEvent = 0;
+var rebirth = require("rebirth");
 
 socket.on('connect', function(){
 	console.log("connected");
@@ -32,6 +33,26 @@ socket.on('command', function(data){
 		socket.emit("busy",true);
 	}
 });
+
+socket.on('update', function(data){
+	if (ongoingEvent == 0) {
+		socket.emit("busy",true);
+		ongoingEvent = 1;
+		console.log("recv update",data);	
+		cmd.get(
+			"git pull",
+			function(res){
+				console.log("update done - rebirth()");
+				rebirth();
+			}
+		);
+
+	} else {
+		socket.emit("error","node busy");
+		socket.emit("busy",true);
+	}
+});
+
 
 socket.on('disconnect', function(){
 	console.log("disconnected");

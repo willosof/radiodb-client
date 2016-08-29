@@ -1,6 +1,6 @@
 {
   "name": "radiodb-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
   "homepage": "https://bitbucket.org/willosof/radiodb-client#readme",
   "dependencies": {
     "node-cmd": "^1.1.1",
+    "rebirth": "^0.2.3",
     "socket.io-client": "^1.4.8"
   }
 }
