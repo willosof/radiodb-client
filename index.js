@@ -1,11 +1,16 @@
 var cmd = require('node-cmd');
 var socket = require('socket.io-client')('http://radio.raider.no');
+var shortid = require('shortid');
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
 var ongoingEvent = 0;
 var rebirth = require("rebirth");
+var myid = shortid.generate();
 
 socket.on('connect', function(){
 	console.log("connected");
 	socket.emit("busy",false);
+	socket.emit("id",myid);
 });
 
 
@@ -13,15 +18,18 @@ socket.on('command', function(data){
 	if (ongoingEvent == 0) {
 		socket.emit("busy",true);
 		ongoingEvent = 1;
-		console.log("recv command",data);	
+		console.log("recv command",data);
 		cmd.get(
 			data.cmd,
 			function(res){
 				console.log("command done");
-		    		socket.emit("command_result", {
+
+				socket.emit("command_result", {
 					command: data.cmd,
-					result: res
+					result: res,
+					cid: data.cid
 				});
+
 				console.log("data sent");
 				ongoingEvent = 0;
 				socket.emit("busy",false);
@@ -38,7 +46,7 @@ socket.on('update', function(data){
 	if (ongoingEvent == 0) {
 		socket.emit("busy",true);
 		ongoingEvent = 1;
-		console.log("recv update",data);	
+		console.log("recv update",data);
 		cmd.get(
 			"git pull origin master",
 			function(res){
@@ -57,4 +65,3 @@ socket.on('update', function(data){
 socket.on('disconnect', function(){
 	console.log("disconnected");
 });
-
