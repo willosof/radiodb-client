@@ -9,10 +9,11 @@ var myid = shortid.generate();
 
 socket.on('connect', function(){
 	console.log("connected");
-	socket.emit("busy",false);
 	socket.emit("id",myid);
+	socket.emit("busy",false);
 });
 
+console.log("myid",myid);
 
 socket.on('command', function(data){
 	if (ongoingEvent == 0) {
