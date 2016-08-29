@@ -18,5 +18,9 @@
   ],
   "author": "William Viker <william.viker@gmail.com>",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/willosof/radiodb-client#readme"
+  "homepage": "https://bitbucket.org/willosof/radiodb-client#readme",
+  "dependencies": {
+    "node-cmd": "^1.1.1",
+    "socket.io-client": "^1.4.8"
+  }
 }
