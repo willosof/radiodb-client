@@ -55,22 +55,16 @@ socket.on('command', function(data){
 });
 
 socket.on('update', function(data){
-	if (ongoingEvent == 0) {
-		socket.emit("busy",true);
-		ongoingEvent = 1;
-		console.log("recv update",data);
-		cmd.get(
-			"git pull origin master",
-			function(res){
-				console.log("update done - rebirth()");
-				rebirth();
-			}
-		);
-
-	} else {
-		socket.emit("error","node busy");
-		socket.emit("busy",true);
-	}
+	socket.emit("busy",true);
+	ongoingEvent = 1;
+	console.log("recv update",data);
+	cmd.get(
+		"git pull origin master",
+		function(res){
+			console.log("update done - rebirth()");
+			rebirth();
+		}
+	);
 });
 
 
