@@ -1,11 +1,22 @@
 var cmd = require('node-cmd');
 var socket = require('socket.io-client')('http://radio.raider.no');
 var shortid = require('shortid');
-shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+var fs = require('fs');
+
+var myid = shortid.generate();
+var read_id;
+
+try {
+	read_id = fs.readFileSync('.id').toString();
+	if (read_id && read_id.length > 4) {
+		myid = read_id;
+	}
+} catch(e) {
+	fs.writeFileSync('.id', myid);
+}
 
 var ongoingEvent = 0;
 var rebirth = require("rebirth");
-var myid = shortid.generate();
 
 socket.on('connect', function(){
 	console.log("connected");
