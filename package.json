@@ -20,6 +20,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/willosof/radiodb-client#readme",
   "dependencies": {
+    "microtime": "^2.1.1",
     "node-cmd": "^1.1.1",
     "rebirth": "^0.2.3",
     "shortid": "^2.2.6",
