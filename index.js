@@ -2,6 +2,8 @@ var cmd = require('node-cmd');
 var socket = require('socket.io-client')('http://radio.raider.no');
 var shortid = require('shortid');
 var fs = require('fs');
+var microtime = require('microtime');
+var connected = false;
 
 var myid = shortid.generate();
 var read_id;
@@ -19,12 +21,29 @@ var ongoingEvent = 0;
 var rebirth = require("rebirth");
 
 socket.on('connect', function(){
+	connected = true;
 	console.log("connected");
+	socket.emit("radionode");
 	socket.emit("id",myid);
 	socket.emit("busy",false);
 });
 
+
 console.log("myid",myid);
+var doPong = function(){};
+
+doPong = function() {
+	if (connected == true) {
+		socket.emit("alive",{
+			mytime: microtime.nowDouble(),
+			myid: shortid
+		})
+	}
+	setTimeout(doPong,2000);
+};
+
+
+doPong();
 
 socket.on('command', function(data){
 	if (ongoingEvent == 0) {
@@ -39,6 +58,7 @@ socket.on('command', function(data){
 				socket.emit("command_result", {
 					command: data.cmd,
 					result: res,
+					mytime: microtime.nowDouble(),
 					cid: data.cid
 				});
 
@@ -69,5 +89,6 @@ socket.on('update', function(data){
 
 
 socket.on('disconnect', function(){
+	connected = false;
 	console.log("disconnected");
 });
