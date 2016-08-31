@@ -36,7 +36,7 @@ doPong = function() {
 	if (connected == true) {
 		socket.emit("alive",{
 			mytime: microtime.nowDouble(),
-			myid: shortid
+			id: myid
 		})
 	}
 	setTimeout(doPong,2000);
