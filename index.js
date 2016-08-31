@@ -17,6 +17,9 @@ try {
 	fs.writeFileSync('.id', myid);
 }
 
+// remove line breaks/feeds
+myid = myid.replace(/(\r\n|\n|\r)/gm,"");
+
 var ongoingEvent = 0;
 var rebirth = require("rebirth");
 
