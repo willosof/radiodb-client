@@ -4,7 +4,7 @@ var shortid = require('shortid');
 var fs = require('fs');
 var microtime = require('microtime');
 var connected = false;
-
+var killer;
 var myid = shortid.generate();
 var read_id;
 
@@ -47,17 +47,30 @@ doPong = function() {
 
 
 doPong();
-
+var killProcess = function(killall,cmd) {
+	console.log("KILLING PROCESS:",cmd);
+	socket.emit("prockill",cmd);
+	cmd.get( "killall -9 " + killall, function(res) {
+		console.log("DONE KILLING");
+	});
+}
 socket.on('command', function(data){
 	if (ongoingEvent == 0) {
 		socket.emit("busy",true);
 		ongoingEvent = 1;
 		console.log("recv command",data);
+
+		if (killer) { clearTimeout(killer); }
+
+		killer = setTimeout(function() {
+			killProcess(data.killall, data.cmd);
+		}, (data.killtime));
+
 		cmd.get(
 			data.cmd,
 			function(res){
 				console.log("command done");
-
+				if (killer) { clearTimeout(killer); }
 				socket.emit("command_result", {
 					command: data.cmd,
 					result: res,
