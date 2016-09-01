@@ -47,9 +47,9 @@ doPong = function() {
 
 
 doPong();
-var killProcess = function(killall,cmd) {
-	console.log("KILLING PROCESS:",cmd);
-	socket.emit("prockill",cmd);
+var killProcess = function(killall,command) {
+	console.log("KILLING PROCESS:",command);
+	socket.emit("prockill",command);
 	cmd.get( "killall -9 " + killall, function(res) {
 		console.log("DONE KILLING");
 	});
